@@ -22,7 +22,7 @@ int main() {
     int count = 0;
     while (1) {
         // Check for incoming downlink messages
-        int rc = zmq_poll(items, 1, 1000); // Poll every second
+        int rc = zmq_poll(items, 1, 1000);
 
         if (rc > 0 && items[0].revents & ZMQ_POLLIN) {
             char topic[256];

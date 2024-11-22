@@ -24,10 +24,15 @@ int main() {
         // for incoming uplink messages
         int rc = zmq_poll(items, 1, 1000); // Poll every second
         if (rc > 0 && items[0].revents & ZMQ_POLLIN) {
-            char topic[256];
-            char message[256];
+            // char topic[256];
+            char topic[256] = {0};
+            // char message[256];
+            char message[256]= {0};
             zmq_recv(subscriber, topic, sizeof(topic), 0);
+            topic[sizeof(topic) - 1] = '\0';
             zmq_recv(subscriber, message, sizeof(message), 0);
+            message[sizeof(message) - 1] = '\0';
+
             // printf("topic: %s\n", topic);
             // printf ("message: %s\n", message);
             printf("Base Station received on %s: %s\n", topic, message);
