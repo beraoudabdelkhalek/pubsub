@@ -1,3 +1,4 @@
+// device, polling with fd and zmq_poll
 #include <zmq.h>
 #include <stdio.h>
 #include <string.h>

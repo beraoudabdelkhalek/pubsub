@@ -24,24 +24,25 @@ int main() {
         // for incoming uplink messages
         int rc = zmq_poll(items, 1, 1000); // Poll every second
         if (rc > 0 && items[0].revents & ZMQ_POLLIN) {
-            // char topic[256];
             char topic[256] = {0};
-            // char message[256];
             char message[256]= {0};
-            zmq_recv(subscriber, topic, sizeof(topic), 0);
-            topic[sizeof(topic) - 1] = '\0';
-            zmq_recv(subscriber, message, sizeof(message), 0);
-            message[sizeof(message) - 1] = '\0';
+            // char topic[256];
+            // char message[256];
+            zmq_recv(subscriber, topic,sizeof(topic) , 0);
+            // topic[sizeof(topic)-1]='\0';
+            zmq_recv(subscriber, message, sizeof(message), ZMQ_DONTWAIT);
+            // message[sizeof(message)-1]='\0';
 
             // printf("topic: %s\n", topic);
             // printf ("message: %s\n", message);
             printf("Base Station received on %s: %s\n", topic, message);
+            // printf("Base Station received on %s\n", message);
         }
 
         // Send downlink message
         char topic[] = "downlink";
         char message[256];
-        snprintf(message, sizeof(message), "Downlink message %d from Base Station\n", count++);
+        snprintf(message, sizeof(message), "Downlink message %d from Base Station", count++);
         zmq_send(publisher, topic, strlen(topic), ZMQ_SNDMORE);
         zmq_send(publisher, message, strlen(message), 0);
         // printf("Base Station sent on %s: %s\n", topic, message);

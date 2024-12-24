@@ -1,3 +1,4 @@
+// device with socket management with fd and epoll
 #include <zmq.h>
 #include <stdio.h>
 #include <string.h>
