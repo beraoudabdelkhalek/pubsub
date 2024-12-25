@@ -24,13 +24,14 @@ int main() {
         // for incoming uplink messages
         int rc = zmq_poll(items, 1, 1000); // Poll every second
         if (rc > 0 && items[0].revents & ZMQ_POLLIN) {
-            char topic[256] = {0};
-            char message[256]= {0};
-            // char topic[256];
-            // char message[256];
-            zmq_recv(subscriber, topic,sizeof(topic) , 0);
-            // topic[sizeof(topic)-1]='\0';
-            zmq_recv(subscriber, message, sizeof(message), ZMQ_DONTWAIT);
+            // char topic[256] = {0};
+            // char message[256]= {0};
+            char topic[256];
+            char message[256];
+            int tsize= zmq_recv(subscriber, topic,sizeof(topic) , 0);
+            message[tsize]='\0';
+            int msize= zmq_recv(subscriber, message, sizeof(message), ZMQ_DONTWAIT);
+            message[msize]='\0';
             // message[sizeof(message)-1]='\0';
 
             // printf("topic: %s\n", topic);

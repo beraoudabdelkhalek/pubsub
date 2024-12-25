@@ -31,11 +31,12 @@ int main() {
         printf("rc: %d\n",rc);
 
         if (rc > 0 && items[0].revents & ZMQ_POLLIN) {
-            char topic[256] = {0};
-            char message[256]= {0};
-            zmq_recv(subscriber, topic, sizeof(topic), 0);
-            // topic[sizeof(topic)-1]='\0';
-            zmq_recv(subscriber, message, sizeof(message), ZMQ_DONTWAIT);
+            char topic[256];
+            char message[256];
+            int tsize= zmq_recv(subscriber, topic, sizeof(topic), 0);
+            topic[tsize]='\0';
+            int msize= zmq_recv(subscriber, message, sizeof(message), ZMQ_DONTWAIT);
+            message[msize]='\0';
             // message[sizeof(message)-1]='\0';
             printf("5G Device received on %s: %s\n", topic, message);
         }
