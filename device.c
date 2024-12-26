@@ -49,7 +49,7 @@ int main() {
         zmq_send(publisher, message, strlen(message), 0);
         // printf("5G Device sent on %s: %s\n", topic, message);
 
-        sleep(3); // Send every 3 seconds
+        // sleep(); // Send every 3 seconds
     }
 
     zmq_close(publisher);
