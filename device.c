@@ -38,6 +38,7 @@ int main() {
             int msize= zmq_recv(subscriber, message, sizeof(message), ZMQ_DONTWAIT);
             message[msize]='\0';
             // message[sizeof(message)-1]='\0';
+            // if (strncasecmp(topic, "downlink", 4) == 0)
             printf("5G Device received on %s: %s\n", topic, message);
         }
 
@@ -49,7 +50,7 @@ int main() {
         zmq_send(publisher, message, strlen(message), 0);
         // printf("5G Device sent on %s: %s\n", topic, message);
 
-        // sleep(); // Send every 3 seconds
+        sleep(2); // Send every 3 seconds
     }
 
     zmq_close(publisher);

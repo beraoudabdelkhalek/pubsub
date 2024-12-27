@@ -27,10 +27,11 @@ void* capture_thread(void* arg) {
             break;  
         }
 
-        
-        printf("[CAPTURE] Received frame of size %d: %.*s\n",
+        char * recmsg= (char*)zmq_msg_data(&frame);
+        if ((strncasecmp(recmsg, "downlink", 4) == 0) || (strncasecmp(recmsg, "uplink", 4) == 0) || (strncasecmp(recmsg, "join", 3) == 0)){
+            printf("[CAPTURE] Received frame of size %d: %.*s\n",
                rc, rc, (char*)zmq_msg_data(&frame));
-        
+        }
         
         int more = 0;
         size_t more_size = sizeof(more);

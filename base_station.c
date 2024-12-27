@@ -27,9 +27,10 @@ int main() {
             // char topic[256] = {0};
             // char message[256]= {0};
             char topic[256];
+            int cap = sizeof(topic);
             char message[256];
-            int tsize= zmq_recv(subscriber, topic,sizeof(topic) , 0);
-            message[tsize]='\0';
+            int tsize= zmq_recv(subscriber, topic,cap-1 , 0);
+            topic[tsize < cap ? tsize : cap - 1]='\0';
             int msize= zmq_recv(subscriber, message, sizeof(message), ZMQ_DONTWAIT);
             message[msize]='\0';
             // message[sizeof(message)-1]='\0';
@@ -48,7 +49,7 @@ int main() {
         zmq_send(publisher, message, strlen(message), 0);
         // printf("Base Station sent on %s: %s\n", topic, message);
 
-        sleep(3); // Send every 3 seconds
+        // sleep(1); // Send every 3 seconds
     }
 
     zmq_close(publisher);
