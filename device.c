@@ -27,18 +27,16 @@ int main() {
     int count = 0;
     while (1) {
         // Check for incoming downlink messages
-        int rc = zmq_poll(items, 1, 1000);
+        int rc = zmq_poll(items, 1, 3);
         printf("rc: %d\n",rc);
 
         if (rc > 0 && items[0].revents & ZMQ_POLLIN) {
             char topic[256];
             char message[256];
-            int tsize= zmq_recv(subscriber, topic, sizeof(topic), 0);
+            int tsize= zmq_recv(subscriber, topic, sizeof(topic), ZMQ_DONTWAIT);
             topic[tsize]='\0';
             int msize= zmq_recv(subscriber, message, sizeof(message), ZMQ_DONTWAIT);
             message[msize]='\0';
-            // message[sizeof(message)-1]='\0';
-            // if (strncasecmp(topic, "downlink", 4) == 0)
             printf("5G Device received on %s: %s\n", topic, message);
         }
 
@@ -50,7 +48,7 @@ int main() {
         zmq_send(publisher, message, strlen(message), 0);
         // printf("5G Device sent on %s: %s\n", topic, message);
 
-        sleep(2); // Send every 3 seconds
+        sleep(1); // Send every 3 seconds
     }
 
     zmq_close(publisher);

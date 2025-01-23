@@ -22,19 +22,28 @@ int main() {
     int count = 0;
     while (1) {
         // for incoming uplink messages
-        int rc = zmq_poll(items, 1, 1000); // Poll every second
+        int rc = zmq_poll(items, 1, 3); // Poll every second
+        printf("rc: %d\n",rc);
         if (rc > 0 && items[0].revents & ZMQ_POLLIN) {
             // char topic[256] = {0};
             // char message[256]= {0};
             char topic[256];
             int cap = sizeof(topic);
             char message[256];
-            int tsize= zmq_recv(subscriber, topic,cap-1 , 0);
+            int tsize= zmq_recv(subscriber, topic,cap-1 , ZMQ_DONTWAIT);
             topic[tsize < cap ? tsize : cap - 1]='\0';
+
+
             int msize= zmq_recv(subscriber, message, sizeof(message), ZMQ_DONTWAIT);
             message[msize]='\0';
             // message[sizeof(message)-1]='\0';
-
+            // check for recieving multipart
+            // int more = 1;
+            // size_t more_size = sizeof(more);
+            // zmq_getsockopt(subscriber, ZMQ_RCVMORE, &more, &more_size);
+            // if (!more) {
+            //     printf("received multipart data\n");
+            // }
             // printf("topic: %s\n", topic);
             // printf ("message: %s\n", message);
             printf("Base Station received on %s: %s\n", topic, message);
@@ -49,7 +58,7 @@ int main() {
         zmq_send(publisher, message, strlen(message), 0);
         // printf("Base Station sent on %s: %s\n", topic, message);
 
-        // sleep(1); // Send every 3 seconds
+        sleep(1); // Send every 3 seconds
     }
 
     zmq_close(publisher);
