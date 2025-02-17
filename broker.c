@@ -4,6 +4,8 @@
 
 int main() {
     void *context = zmq_ctx_new();
+    int io_threads = 2;
+    zmq_ctx_set(context, ZMQ_IO_THREADS, io_threads);
     // XSUB socket for publishers
     void *xsub_socket = zmq_socket(context, ZMQ_XSUB);
     zmq_bind(xsub_socket, "tcp://*:5555");
